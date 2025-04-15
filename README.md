@@ -1,163 +1,268 @@
-# Google Photos Matcher Mac/Unix (v 1.0)
+# Google Photos Matcher Mac/Unix (v1.0)
 
-Simple executable to match metadata from JSONs to original images/videos (Forked from anderbggo/GooglePhotosMatcher which was Windows only compatible).
+A free and open-source tool to restore lost metadata (e.g., dates, GPS coordinates) to images and videos downloaded from Google Photos Takeout. This project is a fork of [GooglePhotosMatcher](https://github.com/anderbggo/GooglePhotosMatcher), enhanced for seamless compatibility with Mac and Unix systems.
 
-Same work than [MetadataFixer](https://metadatafixer.com/pricing) but its free!
+Designed as a cost-free alternative to [MetadataFixer](https://metadatafixer.com/pricing), this tool ensures your media files retain their original metadata effortlessly.
 
-## Wiki 📖
+## Table of Contents
 
-When you download the images from google photos, they lose some metadata such as the date and the coordinates in which they were taken.
+1. [Introduction](#introduction)
+2. [Features](#features)
+3. [Screenshots](#screenshots)
+4. [Usage](#usage)
+   - [Setup](#setup)
+   - [Running the Application](#running-the-application)
+   - [Parameters](#parameters)
+5. [FAQs](#faqs)
+   - [Why is there another folder called _EditedRaw_?](#why-is-there-another-folder-called-editedraw)
+   - [Why do some images/videos stay unmatched?](#why-do-some-imagesvideos-stay-unmatched)
+6. [Contributors](#contributors)
+7. [Support](#support)
+8. [Extra](#extra)
+   - [Debugging](#debugging)
+   - [Bonus Tools](#bonus-tools)
+9. [License](#license)
 
-This algorithm is able to match this information in the image/video from the downloaded JSONs
+## Introduction 📖
+
+When you download images from Google Photos Takeout, they lose some metadata, such as the date and the coordinates where they were taken. This algorithm restores this information by matching it from the downloaded JSON files.
+
+## Features
+
+- Matches metadata (date, GPS coordinates) from JSON files to images/live photos/videos.
+- Supports edited and original versions of media files.
+- Compatible with Mac and Unix systems.
+- Free and open-source.
+
+## Screenshots
+
+Here are some screenshots showcasing the application in action:
+
+1. **App Usage**  
+   ![Application Header](assets/screenshots/google-photo-matcher-1.png)
+
+2. **Metadata Matching**  
+   ![Metadata Matching](assets/screenshots/google-photo-matcher-2.png)
+
+3. **Metadata Matching with Custom Params**  
+   ![Final Output](assets/screenshots/google-photo-matcher-3.png)
 
 ## Usage
 
-1. Download your _Google Photos_ media from [Takeout](https://takeout.google.com/)
+### Setup
 
-2. Download this sourcecode in a folder with:
+1. **Download your Google Photos media**  
+   Use [Google Takeout](https://takeout.google.com/) to download your photos and JSON metadata.
 
+2. **Clone this repository**  
+   Run the following command to download the source code:
+
+   ```bash
+   git clone https://github.com/mtmarco87/google-photos-matcher-mac-unix.git
    ```
-   git clone https://github.com/mtmarco87/GooglePhotosMatcher-Mac-Unix.git
-   ```
 
-3. Install **python 3** on your system. There are multiple ways to do this depending on your OS, e.g.:
+3. **Install Python 3**  
+   Install Python 3 on your system:
 
-   - On mac:
-     ```
+   - On macOS:
+     ```bash
      brew install python3
      ```
-   - On linux:
-     ```
+   - On Linux:
+     ```bash
      sudo apt-get install python3
      ```
 
-4. Install **exiftool** on your system:
+4. **Install ExifTool**  
+   Install ExifTool for metadata manipulation:
 
-   - On mac:
-     ```
+   - On macOS:
+     ```bash
      brew install exiftool
      ```
-   - On linux:
-     ```
+   - On Linux:
+     ```bash
      sudo apt-get install exiftool
      ```
 
-5. Install python app requirements (from project folder):
+5. **Install Python dependencies**  
+   From the project folder, run:
 
-   ```
+   ```bash
    pip install -r requirements.txt
    ```
 
-6. Make the file **run.sh** in the project folder executable:
-
-   ```
+6. **Make the script executable**  
+   Grant execution permissions to the `run.sh` script:
+   ```bash
    chmod 777 run.sh
    ```
 
-7. Now you are all set to match and fix your Google Photos from Takeout simply executing **_run.sh_** **from the project folder** targeting any takeout folder containing json and media files.
+### Running the Application
 
-8. Usage instructions:
+To match and fix your Google Photos metadata, execute the `run.sh` script from the project folder, targeting any Takeout folder containing JSON and media files.
 
-   - To simply match all json/photos/videos in a specific Takeout folder with default settings:
+#### Example:
 
-     ```
-     ./run.sh Takeout/Google\ Photos/Photos\ from\ 2025
-     ```
+```bash
+./run.sh Takeout/Google\ Photos/Photos\ from\ 2025
+```
 
-   - Full app parameters list:
+Matched images/videos will be on directory _Matched_ inside the same path.
 
-     ```
-     ./run.sh target_folder edited_prefix convert_all_to_jpg convert_if_needed
-     ```
+### Parameters
 
-     **target_folder:** the path of the folder containing json and media files you want to fix/match
+The script supports the following parameters:
 
-     **edited_prefix:** tells the app what tags Google uses for edited images in your local language. Google generally adds an _"edited"_ suffix to the modified/customized images keeping both the original version (without this suffix) and the newly edited version. Thanks to this the app may look and fix metadata/gps information for all the image variants, including the original and edited image (**default value: edited**, possible values: anything depending on your language [e.g.: modificato (IT), editado (ES), etc.])
+1. **`target_folder`**  
+   The path to the folder containing JSON and media files to process.
 
-     **convert_all_to_jpg:** tells the app whether to reconvert any exif compatible image file found (TIF, TIFF, JPEG, JPG) to be always converted to JPG (**default value: false**, possible values: true, false)
+2. **`edited_prefix`** _(optional)_  
+   Specifies the suffix Google uses for edited images in your local language.
 
-     **convert_if_needed:** tells the app to reconvert an exif compatible image file to JPG in case the exif editing fails for the current image format; it may reduce errors while reapplying image tags at the cost of reconverting some wrongly encoded image (**default value: true**, possible values: true, false)
+   - Default: `edited`
+   - Example values: `modificato` (IT), `editado` (ES).
 
-9. Matched images/videos will be on directory _Matched_ inside the same path
+3. **`convert_all_to_jpg`** _(optional)_  
+   Whether to convert all EXIF-compatible image files (TIF, TIFF, JPEG, JPG) to JPG.
 
-## Bonus tools
+   - Default: `false`
+   - Possible values: `true`, `false`.
 
-Inside the **tools** folder you can find some tools that further help into Google Photos takeout process.
+4. **`convert_if_needed`** _(optional)_  
+   Whether to convert EXIF-compatible images to JPG if metadata editing fails.
+   - Default: `true`
+   - Possible values: `true`, `false`.
 
-1. **convertVP9toMP4.sh** => sometimes Google re-encodes video files in VP9 google codec. This codec is not supported by all devices (especially, you will never guess :D, Apple devices). Using this tool you can quickly reconvert a video file into h264 codec supported by most devices (including Apple device) with no loss of quality.
+#### Full Command Example:
 
-   - Prerequisites:
-
-     ```
-     brew install ffmpeg
-     chmod 777 ./tools/convertVP9toMP4.sh
-     ```
-
-   - Usage:
-     ```
-     ./tools/convertVP9toMP4.sh source_video_file converted_video_file
-     ```
-
-2. **terabox-file-counter-fetch.js** => in case you want to freely store your taked out photos on [Terabox](https://www.terabox.com) you may surprisingly face difficulties in checking the number of uploaded files (in case you are trying to double check with your original folders). A "custom" and hacky solution is to run this javascript snippet directly into the a terabox web app page while you are logged into it using browser developer tools, by just customizing the variables like in the example provided in the code snippet. More info directly in the source code (a variant based on XHR is provided as well, even though this fetch based one should work well on most modern browsers).
+```bash
+./run.sh target_folder edited_prefix convert_all_to_jpg convert_if_needed
+```
 
 ## FAQs
 
 ### Why is there another folder called _EditedRaw_?
 
-Images and videos edited from _Google Photos's_ editor will have 2 different versions:
+Google Photos stores two versions of edited media:
 
-1. Edited version
-2. Original version
+1. The **edited version** (stored in the `Matched` folder).
+2. The **original version** (stored in the `EditedRaw` folder).
 
-Edited version will be stored in _Matched_ while original in _EditedRaw_
+### Why do some images/videos stay unmatched?
 
-### Why some images/videos stay unmatched?
+Some files may remain unmatched due to special characters in their names. To fix this:
 
-Sometimes, the algorithm does not recognize the names of the images due to the presence of some special characters. These files will remain in the same folder. To fix it, rename both the JSON and the original file.
+1. Rename the file and its corresponding JSON to remove special characters.  
+   Example: Rename `%E&xample.jpg` to `Example.jpg` and `%E&xample.json` to `Example.json`.
 
-#### For example:
+2. Open the JSON file and update the `title` attribute to match the new file name.
 
-- Algorithm fails with image _%E&xample.jpg_
-
-#### Solution
-
-1. Rename _%E&xample.jpg_ to _Example.jpg_ and _%E&xample.json_ to _Example.json_
-
-2. Open JSON and change title attribute to _Example.jpg_
-
-3. Run again
-
-### Debugging
-
-1. Run the app this way to get the debug output into a **results.txt** file:
-
-   ```
-   ./run.sh Takeout/Google\ Photos/Photos\ from\ 2025 > results.txt
-   ```
-
-2. Open **results.txt** with any text editor and look the contents:
-
-   - **Success condition:** If everything went well you should find at the bottom of the file **0 errors** and **many successes** (as much as the amount of image files in your takeout folder)
-
-   - **Errors debugging:** If there are any errors you can analyze them searching for the word **Error**: every error generated in the app is printed with this prefix and some details which may help solving it should be shown
-
-   - **Useful information:** some special output is produced by the app depending on the processing:
-     - **Image Exif updated** => the exif data (creation date) has been updated for the image file printed above
-     - **Image GPS Data added/updated for: _filepath_** => the exif data (gps) has been updated for the image file specified. Supplemental info is shown at the end: **version, altitude, latitude, longitude** in any combination to specify which gps exif properties have been added/updated.
-     - **Warning: Image coordinates not settled** => means that an error happened while trying to add/update image exif gps data
-     - **Video Exif updated** => the exif data (gps) has been updated for the video file printed above. Supplemental info is shown at the end: **Apple** and/or **Android** to specify which of the platform specific tags have been added
-     - **Warning: Video coordinates not settled** => means that an error happened while trying to add/update video exif gps data
-     - **Warn: Fixed Exif** => the image file exif data has been fixed: this is rare but it can occasionally happen due to insertion of non exif standard tags into images by software/hardware/camera manufacturers. The fix consists in converting the wrong exif fields into standard compliant fields and allows the app to update the image exif tags regularly.
-       Supplemental information is shown at the end, e.g.: **37121, 37500, 41728, 41729** in any combination to indicate which Exif Tag Id has been fixed (these are well known and common issues, you can google for it).
+3. Run the script again.
 
 ## Contributors ✒️
 
-- **mtmarco87** - Author of the Google Photos Matcher Mac/Unix variant
-- **anderbggo** - Author of the original Google Photos Matcher
-- **Freepik** - Icon creator
+- **mtmarco87** - Author of the Mac/Unix variant.
+- **anderbggo** - Author of the original Google Photos Matcher.
+- **Freepik** - Icon creator.
 
-## Buy me a coffee☕
+## Support
 
-- [Buy me a coffee](https://buymeacoffee.com/mtmarco87): https://buymeacoffee.com/mtmarco87
-- Btc address: bc1qzy6e99pkeq00rsx8jptx93jv56s9ak2lz32e2d
-- Eth address: 0x38cf74ED056fF994342941372F8ffC5C45E6cF21
+If you find this project helpful, consider supporting the author:
+
+- [Buy me a coffee ☕](https://buymeacoffee.com/mtmarco87): https://buymeacoffee.com/mtmarco87
+- BTC Address: `bc1qzy6e99pkeq00rsx8jptx93jv56s9ak2lz32e2d`
+- ETH Address: `0x38cf74ED056fF994342941372F8ffC5C45E6cF21`
+
+## Extra
+
+### Debugging
+
+If you encounter issues during the matching process, you can debug the application by redirecting the output to a file for analysis:
+
+```bash
+./run.sh Takeout/Google\ Photos/Photos\ from\ 2025 > results.txt
+```
+
+#### Steps to Debug:
+
+1. **Open the `results.txt` file**  
+   Use any text editor to review the output.
+
+2. **Check for Successes and Errors**
+
+   - **Success condition:** At the bottom of the file, you should see `0 errors` and a number of successes equal to the number of media files in your Takeout folder.
+   - **Errors:** Look for lines containing the word `Error`. Each error is prefixed with this keyword and includes details about the issue.
+
+3. **Analyze the Output**  
+   The application provides detailed logs for each processed file:
+
+   - **Image Exif updated:** Indicates that the creation date metadata was successfully updated for the image.
+   - **Image GPS Data added/updated for:** Specifies that GPS data (latitude, longitude, altitude) was successfully added or updated for the image. Details on which property has been added/updated (e.g., `version`, `altitude`, `latitude`, `longitude`) are included.
+   - **Warning: Image coordinates not settled:** Indicates an issue while adding/updating GPS data for an image.
+   - **Video Exif updated:** Indicates that GPS data was successfully updated for a video file. The log specifies whether the update was for `Apple` or `Android`-specific tags.
+   - **Warning: Video coordinates not settled:** Indicates an issue while adding/updating GPS data for a video file.
+   - **Warning: Fixed Exif:** Indicates that non-standard EXIF tags were corrected to comply with standard formats. The log includes the tag IDs that were fixed (e.g., `37121`, `37500`, `41728`, `41729`).
+
+4. **Resolve Errors**
+   - If an image or video remains unmatched, check for special characters in the file name or JSON file. Rename both files and update the `title` attribute in the JSON file to match the new name.
+   - Re-run the script after making corrections.
+
+### Bonus Tools
+
+Additional tools are available in the `tools` folder:
+
+1. **`convert-vp9-to-mp4.sh`**  
+   This script converts VP9-encoded videos (unsupported by some devices, such as Apple devices, but used automatically by Google sometimes) to H.264 MP4 format while preserving **file creation/modification dates** and **GPS coordinates**. This ensures that metadata integrity is maintained during the conversion process.
+
+   - **Prerequisites:**
+
+     ```bash
+     brew install ffmpeg
+     chmod 777 ./tools/convert-vp9-to-mp4.sh
+     ```
+
+   - **Usage:**
+
+     ```bash
+     ./tools/convert-vp9-to-mp4.sh source_video_file converted_video_file
+     ```
+
+   - **Features:**
+     - Transcodes VP9 videos to H.264 MP4 format.
+     - Copies over all metadata, including GPS coordinates.
+     - Reapplies correct file creation and modification dates.
+
+2. **`terabox-folder-compare.js` and `filecount.py`**  
+   These tools help verify that all your Google Photos Takeout files have been uploaded to Terabox (since it does not provide a way to count files in a folder):
+
+   - **`filecount.py`**: Recursively counts files and folders in a local directory and outputs the structure in JSON format.
+
+     - **Usage:**
+       ```bash
+       python filecount.py target_folder
+       ```
+
+   - **`terabox-folder-compare.js`**: Compares the local folder structure (from `filecount.py`) with the file counts in Terabox by interacting with its web app APIs.
+     - **Usage:**  
+       Paste the script into your browser's developer tools console while logged into Terabox and follow the instructions in the script.
+
+   These tools ensure that your uploaded files match the original folder structure.
+
+3. **`terabox-file-counter-fetch.js`**  
+   This script counts the number of files in a Terabox folder, helping verify that all your Google Photos Takeout files have been uploaded correctly. It works by interacting with the Terabox web app's internal APIs.
+
+   - **Usage Instructions:**
+
+     1. Log in to the Terabox web app.
+     2. Open your browser's developer tools (`F12` or `Cmd+Option+I` on macOS).
+     3. Copy the script from `terabox-file-counter-fetch.js` and paste it into the console.
+     4. Press `Enter` to display the file count.
+
+   - **Notes:**
+     - The script may need adjustments if Terabox updates its APIs.
+     - An XHR-based variant is included for older browser compatibility.
+
+## License
+
+This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.

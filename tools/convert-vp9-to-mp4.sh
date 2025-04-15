@@ -1,3 +1,4 @@
+#!/bin/bash
 # Convert vp9 mov to quicktime compatible h264 mp4
 
 # Read original GPS Data

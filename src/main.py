@@ -8,7 +8,7 @@ piexifCodecsToConvert = [k.casefold() for k in ['TIF', 'TIFF']]
 piexifCodecsToRename = [k.casefold() for k in ['JPEG']]
 videoCodecs = [k.casefold() for k in ['MP4', 'MOV']]
     
-def mainProcess(browserPath, editedW, convertAll, convertIfNeeded):    
+def process(browserPath, editedW, convertAll, convertIfNeeded):    
     mediaMoved = []  # array with names of all the media already matched
     path = browserPath  # source path
     fixedMediaPath = path + "/MatchedMedia"  # destination path
@@ -18,7 +18,6 @@ def mainProcess(browserPath, editedW, convertAll, convertIfNeeded):
     editedWord = editedW or "edited"
     convertAll = convertAll or False
     convertIfNeeded = convertIfNeeded or True
-    print(editedWord)
 
     try:
         obj = list(os.scandir(path))  #Convert iterator into a list to sort it
@@ -58,7 +57,7 @@ def mainProcess(browserPath, editedW, convertAll, convertIfNeeded):
                 continue
             
             # TARGET MEDIA METADATA EDIT
-            filepath = updateFileMetadata(data, filepath, title, convertIfNeeded)
+            filepath = updateFileMetadata(data, filepath, title, convertAll, convertIfNeeded)
             if filepath is None:
                 errorCounter += 1
                 continue
@@ -71,7 +70,7 @@ def mainProcess(browserPath, editedW, convertAll, convertIfNeeded):
             
             # ORIGINAL MEDIA METADATA EDIT (IF ANY) 
             if not movedFilePath == "None" and not movedTitle == "None":
-                if updateFileMetadata(data, movedFilePath, movedTitle, convertIfNeeded) is None:
+                if updateFileMetadata(data, movedFilePath, movedTitle, convertAll, convertIfNeeded) is None:
                     errorCounter += 1
                 else:
                     successCounter += 1
@@ -86,7 +85,7 @@ def mainProcess(browserPath, editedW, convertAll, convertIfNeeded):
                 mp4FilePath = filePathName + ".MP4"
                 mp4Title = fileName + ".MP4"
                 if os.path.exists(mp4FilePath):
-                    if updateFileMetadata(data, mp4FilePath, mp4Title, False) is None:
+                    if updateFileMetadata(data, mp4FilePath, mp4Title, False, False) is None:
                         errorCounter += 1
                     else:
                         os.replace(mp4FilePath, fixedMediaPath + "/" + mp4Title)
@@ -103,11 +102,11 @@ def mainProcess(browserPath, editedW, convertAll, convertIfNeeded):
     if errorCounter == 1:
         errorMessage = " error"
 
-    print(100)
-    print("Matching process finished with " + str(successCounter) + sucessMessage + " and " + str(errorCounter) + errorMessage + ".")
+    print(str(100) + "%")
+    print("\nMatching process finished with " + str(successCounter) + sucessMessage + " and " + str(errorCounter) + errorMessage + ".")
 
 
-def updateFileMetadata(data, filepath, title, convertIfNeeded):
+def updateFileMetadata(data, filepath, title, convertAll, convertIfNeeded):
     # METADATA EDIT
     timeStamp = int(data['photoTakenTime']['timestamp'])  # Get creation time
     print(filepath)
@@ -195,10 +194,34 @@ def renameToJpg(filepath, filePathName, title):
         return None
 
 
+## Application
 
-## App initialization
+def showAppHeader(folder, editedW, convertAll, convertIfNeeded):
+    # App header and parameter recap
+    print("===================================")
+    print(" Google Photos Matcher Mac/Unix ")
+    print("===================================")
+    print("Parameters Recap:")
+    print(f"  - Target Folder: {folder}")
+    print(f"  - Edited Word: {editedW if editedW else 'Default (edited)'}")
+    print(f"  - Convert All to JPG: {convertAll if convertAll is not None else 'Default (False)'}")
+    print(f"  - Convert If Needed: {convertIfNeeded if convertIfNeeded is not None else 'Default (True)'}")
+    print("===================================\n")
 
-if len(sys.argv) > 1:
+def showErrorAndLegend():
+    # Show error and usage legend
+    print("===================================")
+    print(" Google Photos Matcher Mac/Unix ")
+    print("===================================\n")
+    print("Error: No folder specified.\n\n")
+    print("Usage: ./run.sh <target_folder> [edited_word] [convert_all_to_jpg] [convert_if_needed]\n")
+    print("Arguments:")
+    print("  <target_folder>       Path to the folder containing JSON and media files.")
+    print("  [edited_word]         (Optional) Suffix for edited media. Default: 'edited'.")
+    print("  [convert_all_to_jpg]  (Optional) Convert all images to JPG. Default: False.")
+    print("  [convert_if_needed]   (Optional) Convert images to JPG if metadata editing fails. Default: True.\n\n")
+
+def readArgs():
     folder = sys.argv[1]
     
     editedW = sys.argv[2] if len(sys.argv) > 2 else None
@@ -216,5 +239,16 @@ if len(sys.argv) > 1:
             convertIfNeeded = True
         elif sys.argv[4].casefold() == "false".casefold():
             convertIfNeeded = False
+    
+    return [folder, editedW, convertAll, convertIfNeeded]
+
+def appInit():
+    if len(sys.argv) > 1:
+        [folder,editedW, convertAll, convertIfNeeded] = readArgs()
+        showAppHeader(folder, editedW, convertAll, convertIfNeeded)
+        process(folder, editedW, convertAll, convertIfNeeded)
+    else:
+        showErrorAndLegend()
+        return
         
-    mainProcess(folder, editedW, convertAll, convertIfNeeded)
+appInit()

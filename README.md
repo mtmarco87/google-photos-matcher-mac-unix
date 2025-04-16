@@ -1,12 +1,12 @@
-# Google Photos Matcher Mac/Unix (v1.0)
+# Google Photos Matcher Mac/Unix
 
-A free and open-source tool to restore lost metadata (e.g., dates, GPS coordinates) to images and videos downloaded from Google Photos Takeout. This project is a fork of [GooglePhotosMatcher](https://github.com/anderbggo/GooglePhotosMatcher), enhanced for seamless compatibility with Mac and Unix systems.
+A free and open-source tool to restore lost metadata (e.g., dates, GPS coordinates) to images and videos downloaded from Google Photos Takeout, optimized for Mac and Unix systems.
 
 Designed as a cost-free alternative to [MetadataFixer](https://metadatafixer.com/pricing), this tool ensures your media files retain their original metadata effortlessly.
 
 ## Table of Contents
 
-1. [Introduction](#introduction)
+1. [Project Overview](#project-overview)
 2. [Features](#features)
 3. [Screenshots](#screenshots)
 4. [Usage](#usage)
@@ -23,16 +23,18 @@ Designed as a cost-free alternative to [MetadataFixer](https://metadatafixer.com
    - [Bonus Tools](#bonus-tools)
 9. [License](#license)
 
-## Introduction 📖
+## Project Overview
 
-When you download images from Google Photos Takeout, they lose some metadata, such as the date and the coordinates where they were taken. This algorithm restores this information by matching it from the downloaded JSON files.
+When you download images and videos from Google Photos Takeout, they lose important metadata, such as the date and the GPS coordinates where they were taken. This tool restores that information by matching it from the downloaded JSON files, ensuring your media files retain their original context.
+
+This project is a fork of [GooglePhotosMatcher](https://github.com/anderbggo/GooglePhotosMatcher), enhanced for seamless compatibility with Mac and Unix systems.
 
 ## Features
 
-- Matches metadata (date, GPS coordinates) from JSON files to images/live photos/videos.
-- Supports edited and original versions of media files.
-- Compatible with Mac and Unix systems.
-- Free and open-source.
+- **Metadata Matching:** Matches metadata (date, GPS coordinates) from JSON files to images/live photos/videos.
+- **Edited/Original Support:** Supports edited and original versions of media files.
+- **Cross-Platform:** Compatible with Mac and Unix systems.
+- **Free & Open-Source:** Completely free and open-source.
 
 ## Screenshots
 
@@ -160,9 +162,9 @@ Some files may remain unmatched due to special characters in their names. To fix
 
 3. Run the script again.
 
-## Contributors ✒️
+## Contributors
 
-- **mtmarco87** - Author of the Mac/Unix variant.
+- **[mtmarco87](mailto:mt.marco87@gmail.com)** - Author of this project.
 - **anderbggo** - Author of the original Google Photos Matcher.
 - **Freepik** - Icon creator.
 
@@ -265,4 +267,4 @@ Additional tools are available in the `tools` folder:
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the [GNU General Public License v3.0](LICENSE). See the `LICENSE` file for details.

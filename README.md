@@ -11,16 +11,16 @@ Designed as a cost-free alternative to [MetadataFixer](https://metadatafixer.com
 3. [Screenshots](#screenshots)
 4. [Usage](#usage)
    - [Setup](#setup)
-   - [Running the Application](#running-the-application)
+   - [How to Run](#how-to-run)
    - [Parameters](#parameters)
 5. [FAQs](#faqs)
    - [Why is there another folder called _EditedRaw_?](#why-is-there-another-folder-called-editedraw)
    - [Why do some images/videos stay unmatched?](#why-do-some-imagesvideos-stay-unmatched)
-6. [Contributors](#contributors)
-7. [Support](#support)
-8. [Extra](#extra)
+6. [Extras](#extras)
    - [Debugging](#debugging)
    - [Bonus Tools](#bonus-tools)
+7. [Acknowledgments](#acknowledgments)
+8. [Support](#support)
 9. [License](#license)
 
 ## Project Overview
@@ -63,14 +63,17 @@ Here are some screenshots showcasing the application in action:
    git clone https://github.com/mtmarco87/google-photos-matcher-mac-unix.git
    ```
 
-3. **Install Python 3**  
+3. **Install Python 3**
    Install Python 3 on your system:
 
    - On macOS:
+
      ```bash
      brew install python3
      ```
+
    - On Linux:
+
      ```bash
      sudo apt-get install python3
      ```
@@ -79,10 +82,13 @@ Here are some screenshots showcasing the application in action:
    Install ExifTool for metadata manipulation:
 
    - On macOS:
+
      ```bash
      brew install exiftool
      ```
+
    - On Linux:
+
      ```bash
      sudo apt-get install exiftool
      ```
@@ -96,11 +102,12 @@ Here are some screenshots showcasing the application in action:
 
 6. **Make the script executable**  
    Grant execution permissions to the `run.sh` script:
+
    ```bash
-   chmod 777 run.sh
+   chmod +x run.sh
    ```
 
-### Running the Application
+### How to Run
 
 To match and fix your Google Photos metadata, execute the `run.sh` script from the project folder, targeting any Takeout folder containing JSON and media files.
 
@@ -162,21 +169,7 @@ Some files may remain unmatched due to special characters in their names. To fix
 
 3. Run the script again.
 
-## Contributors
-
-- **[mtmarco87](mailto:mt.marco87@gmail.com)** - Author of this project.
-- **anderbggo** - Author of the original Google Photos Matcher.
-- **Freepik** - Icon creator.
-
-## Support
-
-If you find this project helpful, consider supporting the author:
-
-- [Buy me a coffee ☕](https://buymeacoffee.com/mtmarco87): https://buymeacoffee.com/mtmarco87
-- BTC Address: `bc1qzy6e99pkeq00rsx8jptx93jv56s9ak2lz32e2d`
-- ETH Address: `0x38cf74ED056fF994342941372F8ffC5C45E6cF21`
-
-## Extra
+## Extras
 
 ### Debugging
 
@@ -188,27 +181,22 @@ If you encounter issues during the matching process, you can debug the applicati
 
 #### Steps to Debug:
 
-1. **Open the `results.txt` file**  
-   Use any text editor to review the output.
+1. **Review the `results.txt` file**  
+   Open the file in any text editor to check the output.
 
 2. **Check for Successes and Errors**
 
-   - **Success condition:** At the bottom of the file, you should see `0 errors` and a number of successes equal to the number of media files in your Takeout folder.
-   - **Errors:** Look for lines containing the word `Error`. Each error is prefixed with this keyword and includes details about the issue.
+   - **Success:** Look for `0 errors` at the bottom of the file. The number of successes should match the number of media files in your Takeout folder.
+   - **Errors:** Search for lines containing `Error` for details about any issues.
 
-3. **Analyze the Output**  
-   The application provides detailed logs for each processed file:
-
-   - **Image Exif updated:** Indicates that the creation date metadata was successfully updated for the image.
-   - **Image GPS Data added/updated for:** Specifies that GPS data (latitude, longitude, altitude) was successfully added or updated for the image. Details on which property has been added/updated (e.g., `version`, `altitude`, `latitude`, `longitude`) are included.
-   - **Warning: Image coordinates not settled:** Indicates an issue while adding/updating GPS data for an image.
-   - **Video Exif updated:** Indicates that GPS data was successfully updated for a video file. The log specifies whether the update was for `Apple` or `Android`-specific tags.
-   - **Warning: Video coordinates not settled:** Indicates an issue while adding/updating GPS data for a video file.
-   - **Warning: Fixed Exif:** Indicates that non-standard EXIF tags were corrected to comply with standard formats. The log includes the tag IDs that were fixed (e.g., `37121`, `37500`, `41728`, `41729`).
-
-4. **Resolve Errors**
-   - If an image or video remains unmatched, check for special characters in the file name or JSON file. Rename both files and update the `title` attribute in the JSON file to match the new name.
-   - Re-run the script after making corrections.
+3. **Analyze Logs**  
+   The application provides detailed logs for each file:
+   - **Image Exif updated:** Creation date metadata was successfully added or updated.
+   - **Image GPS Data added/updated:** GPS data (latitude, longitude, altitude) was successfully added or updated.
+   - **Warning: Image coordinates not settled:** Indicates an issue with GPS data for an image.
+   - **Video Exif updated:** Creation date and GPS data were successfully added or updated for a video file (applied to `Apple`- or `Android`-specific tags).
+   - **Warning: Video coordinates not settled:** Indicates an issue with GPS data for a video.
+   - **Warning: Fixed Exif:** Non-standard EXIF tags were corrected (e.g., `37121`, `37500`, `41728`, `41729`).
 
 ### Bonus Tools
 
@@ -221,7 +209,7 @@ Additional tools are available in the `tools` folder:
 
      ```bash
      brew install ffmpeg
-     chmod 777 ./tools/convert-vp9-to-mp4.sh
+     chmod +x ./tools/convert-vp9-to-mp4.sh
      ```
 
    - **Usage:**
@@ -254,16 +242,28 @@ Additional tools are available in the `tools` folder:
 3. **`terabox-file-counter-fetch.js`**  
    This script counts the number of files in a Terabox folder, helping verify that all your Google Photos Takeout files have been uploaded correctly. It works by interacting with the Terabox web app's internal APIs.
 
-   - **Usage Instructions:**
-
-     1. Log in to the Terabox web app.
-     2. Open your browser's developer tools (`F12` or `Cmd+Option+I` on macOS).
-     3. Copy the script from `terabox-file-counter-fetch.js` and paste it into the console.
-     4. Press `Enter` to display the file count.
+   - **Usage:**  
+      Paste the script into your browser's developer tools console while logged into Terabox and follow the instructions in the script.
 
    - **Notes:**
      - The script may need adjustments if Terabox updates its APIs.
      - An XHR-based variant is included for older browser compatibility.
+
+## Acknowledgments
+
+- **[mtmarco87](mailto:mt.marco87@gmail.com)** - Author of this project.
+- **anderbggo** - Author of the original Google Photos Matcher.
+- **Freepik** - Icon creator.
+
+## Support
+
+If you find this project useful, consider supporting its development:
+
+- ⭐ Star the repository to show your appreciation.
+- 💬 Share feedback or suggestions by opening an issue.
+- ☕ [Buy me a coffee](https://buymeacoffee.com/mtmarco87) to support future updates and improvements.
+- 🔵 BTC Address: `bc1qzy6e99pkeq00rsx8jptx93jv56s9ak2lz32e2d`
+- 🟣 ETH Address: `0x38cf74ED056fF994342941372F8ffC5C45E6cF21`
 
 ## License
 

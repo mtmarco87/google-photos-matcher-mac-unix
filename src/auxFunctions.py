@@ -177,16 +177,6 @@ def set_Images_EXIF(filepath, lat, lng, altitude, timeStamp):
                 gps_ifd[piexif.GPSIFD.GPSLongitudeRef] = lng_deg[3]
                 gps_ifd[piexif.GPSIFD.GPSLongitude] = exiv_lng
                 updated.append("longitude")
-            
-            # gps_ifd = {
-            #     piexif.GPSIFD.GPSVersionID: (2, 0, 0, 0),
-            #     piexif.GPSIFD.GPSAltitudeRef: 1,
-            #     piexif.GPSIFD.GPSAltitude: change_to_rational(round(altitude, 2)),
-            #     piexif.GPSIFD.GPSLatitudeRef: lat_deg[3],
-            #     piexif.GPSIFD.GPSLatitude: exiv_lat,
-            #     piexif.GPSIFD.GPSLongitudeRef: lng_deg[3],
-            #     piexif.GPSIFD.GPSLongitude: exiv_lng,
-            # }
 
             exif_dict['GPS'] = gps_ifd
             
